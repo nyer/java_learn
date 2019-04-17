@@ -25,6 +25,15 @@ public class Lockinfo {
 		UnsafeTest.printObjectLayout(lockinfo); // bias_lock bit 0, lock bits 01, hashcode bits store
 	}
 	
+	public static void main1(String[] args) {
+		
+		// found that bias lock is appropriate to class object
+		UnsafeTest.printObjectLayout(Lockinfo.class);
+		synchronized (Lockinfo.class) {
+			UnsafeTest.printObjectLayout(Lockinfo.class);
+		}
+	}
+	
 	// 锁升级
 	public static void main(String[] args) throws InterruptedException {
 		
@@ -77,5 +86,6 @@ public class Lockinfo {
 		Thread.sleep(1000); // 原因同上
 		System.out.println("final lock info");
 		UnsafeTest.printObjectLayout(lockinfo);
+		
 	}
 }
