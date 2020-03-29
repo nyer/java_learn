@@ -1,5 +1,7 @@
 package vm.thread;
 
+import java.util.Scanner;
+
 public class ThreadState {
 
 	private static Object lock = new Object();
@@ -33,7 +35,7 @@ public class ThreadState {
 		}
 	}
 	
-	public static void main(String[] args) throws InterruptedException {
+	public static void main2(String[] args) throws InterruptedException {
 		
 		Thread thread = new Thread(new Runnable() {
 			public void run() {
@@ -66,6 +68,36 @@ public class ThreadState {
 		synchronized (lock2) {
 			// thread hold the lock2 object lock
 			System.out.println("success to acquire lock2");
+		}
+		
+	}
+	
+	public static void main(String[] args) throws InterruptedException {
+		
+		Runnable runnable = new Runnable() {
+			
+			@Override
+			public void run() {
+				
+				synchronized (lock) {
+				
+					try {
+						lock.wait();
+						new Scanner(System.in).nextLine();
+					} catch (Throwable e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		
+		new Thread(runnable).start();
+		new Thread(runnable).start();
+		
+		new Scanner(System.in).nextLine();
+		synchronized (lock) {
+			
+			lock.notifyAll();
 		}
 		
 	}
